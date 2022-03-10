@@ -1,0 +1,32 @@
+{
+    "name": "dcat-admin/media-center",
+    "alias": "媒体中心",
+    "description": "管理网站媒体文件...",
+    "type": "library",
+    "keywords": ["dcat-admin", "extension"],
+    "homepage": "https://github.com/dcat-admin/file-manager",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "J.yang",
+            "email": "55811858@qq.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0",
+        "dcat/laravel-admin": "~2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Dcat\\Admin\\MediaCenter\\": "src/"
+        }
+    },
+    "extra": {
+        "dcat-admin": "Dcat\\Admin\\MediaCenter\\MediaCenterServiceProvider",
+        "laravel": {
+            "providers": [
+                "Dcat\\Admin\\MediaCenter\\MediaCenterServiceProvider"
+            ]
+        }
+    }
+}

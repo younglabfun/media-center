@@ -1,10 +1,13 @@
-class Uploader {
+class MCSelector {
     constructor(options) {
-        this.options = options = $.extend({
+        this.defaults = {
+            mode : 'full', // full:带选择 single 单上传
             uploader: {
                 pick: {
-                    id: '#filePicker',
-                    label: '<i class="feather icon-upload"></i>&nbsp;选择文件'
+                    id: '#uploadBtn',
+                    label: '<i class="feather icon-upload"></i>&nbsp;选择文件',
+                    multiple: false,
+                    style: ''   // 使用自定义按钮样式 注释后使用webupload默认按钮样式
                 },
                 swf: './Uploader.swf',
                 chunked: false,
@@ -25,22 +28,36 @@ class Uploader {
                 values: []
             },
             lang: {
-                file_type_denied: Dcat.lang.error_file_type || '不允许上传此类型文件',
-                exceed_num_limit: Dcat.lang.exceed_num_limit || '已超出文件上传数量限制',
-                exceed_file_size: Dcat.lang.exceed_file_size || '当前选择的文件过大',
-                exceed_size_limit: Dcat.lang.exceed_size_limit || '已超出文件大小限制',
-                file_duplicate: Dcat.lang.file_duplicate || '文件重复',
-                //selector
-                exceed_max_item: Dcat.lang.exceed_max_item || '已超出最大可选择的数量',
+                file_type_denied: '不允许上传此类型文件',
+                exceed_num_limit: '已超出文件上传数量限制',
+                exceed_file_size: '当前选择的文件过大',
+                exceed_size_limit: '已超出文件大小限制',
+                file_duplicate: '文件重复',
+                exceed_max_item: '已超出最大可选择的数量',
             },
-        }, options);
+        };
+
+        this.options = $.extend({}, this.defaults, options);
+
+        this.options.uploader.server = options.config.uploadService; // 上传服务
+        this.options.uploader.pick.style = ''; // 使用自定义按钮样式 注释后使用webupload默认按钮样式
+
+        if (options.config.type != 'blend')
+        {
+            this.options.uploader.accept = {
+                title : options.config.type,
+                extensions: options.config.ext,
+            }
+        }
+        //console.log('accept', this.options.uploader.accept);
 
         //验证文件总数量 && 是否开起同时选择多个文件能力
-        if (options.length!=0)
+        if (options.config.length!=0)
         {
-            this.options.uploader.fileNumLimit = options.length;
-            this.options.selector.max = options.length;
-            if (options.length>1) {
+            var length = options.config.length;
+            this.options.uploader.fileNumLimit = length;
+            this.options.selector.max = length;
+            if (length>1) {
                 this.options.uploader.pick.multiple = true;
                 this.options.selector.multiple = true;
             }else{
@@ -48,9 +65,6 @@ class Uploader {
                 this.options.selector.multiple = false;
             }
         }
-
-        this.options.uploader.server = options.config.uploadService;
-        this.options.uploader.pick.style = ''; // 使用自定义按钮样式 注释后使用webupload默认按钮样式
 
         // 实例化
         this.uploader = WebUploader.create(this.options.uploader);
@@ -65,8 +79,13 @@ class Uploader {
         let uploader = this.uploader,
             // 实际field input显示数据内容
             uploadedFiles = [],
+            mode = this.options.mode,
             lang = this.options.lang,
             state = 'pedding';  // 可能有pedding, ready, uploading, confirm, done.
+        var fileCount = 0;
+        var fileSize = 0;
+
+        console.log('mode', mode);
 
         uploader.on('ready', function() {
             window.uploader = this.uploader;
@@ -98,7 +117,7 @@ class Uploader {
                     break;
 
                 case  'uploadAccept':
-                    console.log('uploadAccept:', obj, ret);
+                    //console.log('uploadAccept:', obj, ret);
                     uploadAccept( obj, ret )
                     break;
 
@@ -109,7 +128,7 @@ class Uploader {
         uploader.onError = function( code ) {
             switch (code) {
                 case 'Q_TYPE_DENIED':
-                    Dcat.error(lang.error_file_type);
+                    Dcat.error(lang.file_type_denied);
                     break;
                 case 'Q_EXCEED_NUM_LIMIT':
                     Dcat.error(lang.exceed_num_limit);
@@ -135,7 +154,7 @@ class Uploader {
             if ( val === state ) {
                 return;
             }
-            
+
             state = val;
 
             switch ( state ) {
@@ -163,15 +182,18 @@ class Uploader {
             var stats = uploader.getStats();
             if ( stats.successNum ) {
                 Dcat.success( '完成上传' );
+                if (mode !== 'full') {
+                    setTimeout(function(){
+                        location.reload();
+                    },3000);
+                }
             } else {
                 // 没有成功的图片，重设
                 state = 'done';
-                //location.reload();
             }
         };
         let confirm = () => {
-            console.log('status: confirm!');
-
+            //console.log('status: confirm!');
             var stats = uploader.getStats();
             if ( stats.successNum && !stats.uploadFailNum ) {
                 setState( 'finish' );
@@ -186,16 +208,19 @@ class Uploader {
                 Dcat.error(result.data.message);
                 return false;
             }
+            Dcat.success(result.data.name + ' ' +result.data.message);
 
-            // 上传成功，保存新文件名和路径到file对象
-            obj.file.id = result.data.id;
-            obj.file.name = result.data.name;
-            obj.file.path = result.data.path;
-            obj.file.fileType = result.data.fileType;
-            obj.file.url = result.data.url || null;
+            if (mode == 'full') {
+                // 上传成功，保存新文件名和路径到file对象
+                obj.file.id = result.data.id;
+                obj.file.name = result.data.name;
+                obj.file.path = result.data.path;
+                obj.file.fileType = result.data.fileType;
+                obj.file.url = result.data.url || null;
 
-            setFieldVal(obj.file);
-            addUploadedFile(obj.file);
+                setFieldVal(obj.file);
+                addUploadedFile(obj.file);
+            }
         };
 
         // 为Field赋值
@@ -238,6 +263,7 @@ class Uploader {
 
         // 显示上传文件
         let addUploadedFile = ( file ) => {
+            console.log('add uploaded file!')
             var html = '<li class="list-inline-item">' +
                     '<a href="JavaScript:;" title="预览" data-path="' + file.path + '" data-id="' + file.id + '">';
             if (file.fileType == 'image'){
@@ -283,10 +309,11 @@ class Uploader {
 
         //  初始化
         let initUI = () => {
-            if (this.options.fieldVal == ''){
+            console.log('init UI ');
+            if (typeof this.options.fieldVal == "undefined" || this.options.fieldVal == ''){
                 return false;
             }
-            console.log(this.options.fieldVal);
+            //console.log(this.options.fieldVal);
             var fieldVals =  JSON.parse(this.options.fieldVal);
 
             for(var i=0;i<fieldVals.length;i++){
@@ -299,6 +326,7 @@ class Uploader {
         };
 
         let reloadPreviews = () => {
+            console.log('reload Previews');
             // 清空重建预览
             $('.field_' + this.options.fieldId + '_display').html('');
 
@@ -311,7 +339,9 @@ class Uploader {
             }
         };
 
-        initUI();
+        if (mode == 'full') {
+            initUI();
+        }
 
         //selector
         $(document).on('table:loaded', function () {
@@ -328,6 +358,7 @@ class Uploader {
 
             // 绑定提交按钮
             dialog.find('.submit-btn').on('click', function () {
+                console.log('bind submit!');
                 reloadPreviews();
             })
 

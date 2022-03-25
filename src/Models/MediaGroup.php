@@ -3,6 +3,7 @@
 namespace Dcat\Admin\MediaCenter\Models;
 
 use Dcat\Admin\Traits\HasDateTimeFormatter;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Dcat\Admin\Traits\ModelTree;
@@ -28,9 +29,17 @@ class MediaGroup extends Model implements Sortable
         'sort_when_creating' => true,
     ];
 
-    public function media()
+    /**
+     * 定义关联模型
+     * belongsToMany
+     */
+    public function groupMedias(): BelongsToMany
     {
-        return $this->hasMany(Media::class, 'group_id');
+        $pivotTable = 'media_group_relation';
+        $relatedModel = Media::class;
+
+        return $this->belongsToMany($relatedModel, $pivotTable, 'group_id', 'media_id')
+            ->withTimestamps();;
     }
 
     public static function getOptions($rootText = '')
@@ -44,7 +53,7 @@ class MediaGroup extends Model implements Sortable
             ->get();
         foreach ($data as $item)
         {
-            $options[$item['id']] = $item['title'];
+            $options[$item['id']] = $item['name'];
         }
         return $options;
     }

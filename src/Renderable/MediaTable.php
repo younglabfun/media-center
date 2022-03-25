@@ -45,7 +45,7 @@ class MediaTable extends LazyRenderable
             $grid->quickSearch(['file_name', 'title', 'type']);
 
             $grid->simplePaginate();
-            $grid->view('dcat-admin.media-center::media_page');
+            $grid->view('dcat-admin.media-center::_page');
             $grid->paginate(25);
         });
     }

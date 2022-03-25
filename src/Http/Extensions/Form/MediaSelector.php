@@ -3,17 +3,13 @@
 namespace Dcat\Admin\MediaCenter\Http\Extensions\Form;
 
 use Dcat\Admin\MediaCenter\Helpers\FileUtil;
-use Dcat\Admin\Form\Field\MultipleSelectTable;
 use Dcat\Admin\Form\Field;
 use Dcat\Admin\MediaCenter\Renderable\MediaGroupTable;
 use Dcat\Admin\MediaCenter\Renderable\MediaTable;
 use Dcat\Admin\MediaCenter\MediaCenterServiceProvider;
 use Dcat\Admin\Support\JavaScript;
 use Illuminate\Support\Facades\Storage;
-use Dcat\Admin\Widgets\DialogTable;
-use Dcat\Admin\Widgets\LazyTable;
 use Dcat\Admin\Widgets\Modal;
-use Dcat\Admin\Admin;
 
 class MediaSelector extends Field
 {
@@ -21,20 +17,18 @@ class MediaSelector extends Field
      * 上传服务
      * @var string
      */
-    protected $uploadService = '/admin/uploadSerives';
-    
-    protected $view = 'dcat-admin.media-center::media_selector';
+    protected $uploadService;
+
+    protected $view = 'dcat-admin.media-center::_selector';
 
     protected $selectStyle = 'success';
 
-    /**
-     * @var array
-     */
     protected $types = [];
 
     public function __construct($column, array $arguments)
     {
         parent::__construct($column, $arguments);
+        $this->uploadService = MediaCenterServiceProvider::setting('uploadService');
         $this->types = FileUtil::getFileTypes();
     }
 
@@ -53,19 +47,25 @@ class MediaSelector extends Field
         $type = isset($this->options['type']) && ! empty($this->options['type']) ? $this->options['type'] : 'blend';
 
         $valideType = array_keys($this->types);
-        if( !in_array($type, $valideType) ){
+        $ext = '';
+        if( in_array($type, $valideType) ) {
+            $ext = implode(",", FileUtil::getTypes($type));
+        }else{
             $type = "blend";
         }
 
         $options = array_merge(
             [
-                'length' => $length,
-                'type' => $type,
+                'mode' => 'full',
                 'config' => [
                     'uploadService'=> $this->uploadService,
-                    'pathUrl'   => $pathUrl
+                    'pathUrl'   => $pathUrl,
+                    'length' => $length,
+                    'type' => $type,
+                    'ext' => $ext,
                 ],
-                'uploader' => []
+                'uploader' => [],
+                'selector' => []
             ],
             $this->options
         );

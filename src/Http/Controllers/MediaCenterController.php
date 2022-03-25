@@ -47,7 +47,7 @@ class MediaCenterController extends Controller
             $grid->disableEditButton();
             $grid->disableViewButton();
             $grid->disableQuickEditButton(false);
-            $grid->setDialogFormDimensions('500px', '280px');
+            $grid->setDialogFormDimensions('500px', '350px');
 
             $grid->quickSearch(['id', 'title']);
             $grid->filter(function ($filter) {
@@ -71,18 +71,13 @@ class MediaCenterController extends Controller
                 ->width('50px');
 
             $grid->column('title','名称')->editable();
-            $grid->column('group_id','分组')
-                ->width('110px')
-                ->display(function(){
-                    return Media::getGroupTitle($this->mediaGroup);
-                })->label('info')
-                ->filterByValue();
+            $grid->mediaGroups('分组')->pluck('name')->label()->filter();
             $grid->column('type','类型')
                 ->width("100px")->label('#222')
                 ->filter(
                     Grid\Column\Filter\In::make(FileUtil::getFileTypes())
-                )
-                ->filterByValue();
+                );
+                //->filterByValue();
             $grid->column('size','大小')->display(function(){
                 return FileUtil::getFormatBytes($this->size);
             })->width("80px");
@@ -108,15 +103,6 @@ class MediaCenterController extends Controller
             });
         });
     }
-/*
-    public function fileSelector(Content $content)
-    {
-        return $content
-            ->title(FileManagerServiceProvider::trans('file.files'))
-            ->description(FileManagerServiceProvider::trans('file.list'))
-            ->body($this->grid());
-    }
-*/
 
     /**
      * Create interface.
@@ -139,9 +125,17 @@ class MediaCenterController extends Controller
      */
     protected function form()
     {
-        return Form::make(new Media(), function (Form $form) {
+        return Form::make(Media::with('mediaGroups'), function (Form $form) {
             $form->text('title', '名称');
-            $form->select('group_id', '分组')->options(MediaGroup::selectOptions(null, '不分组'));
+            $form->tree('media_groups', '分组')
+                ->nodes(function () {
+                    $nodes = (new MediaGroup())->allNodes();
+                    return $nodes;
+                })
+                ->customFormat(function ($v) {
+                    if (!$v) return [];
+                    return array_column($v, 'id');
+                });
         });
     }
 
@@ -162,6 +156,17 @@ class MediaCenterController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update($id)
+    {
+        return $this->form()->update($id);
+    }
+
+    /**
      * 删除文件
      * @param $id
      * @return mixed
@@ -178,91 +183,4 @@ class MediaCenterController extends Controller
             ->send();
     }
 
-    /**
-     * 更新字段
-     * @param $id
-     * @param Request $request
-     * @return mixed
-     */
-    public function update($id, Request $request){
-        if ($request->title == null && $request->group_id == null){
-            return JsonResponse::make()
-                ->error(trans('admin.update_failed'))
-                ->send();
-        }
-        if ($request->title != null){
-            $data['title'] = $request->title;
-        }
-        if ($request->group_id != null){
-            $data['group_id'] = $request->group_id;
-        }
-
-        $result = Media::where("id",$id)->update($data);
-        if ($result){
-            return JsonResponse::make()
-                ->success(trans('admin.update_succeeded'))
-                ->send();
-        }
-
-        return JsonResponse::make()
-            ->error(trans('admin.update_failed'))
-            ->send();
-
-    }
-/*
-    public function getFileGroupList()
-    {
-        $data = FileGroup::selectOptions();
-        $list = [];
-        foreach ($data as $id=>$name)
-        {
-            if ($id == 0) {
-                $group = ['id' => 0, 'name' => '全部文件'];
-            }else{
-                $group = ['id' => $id, 'name' => $name];
-            }
-            $list[] = $group;
-        }
-        return $this->jsonResponse($list);
-    }
-
-    public function getFileList(Request $request)
-    {
-        $msg = '';
-        $data = FileModel::query()->orderBy('updated_at', 'DESC')->get();
-        $list = [];
-        if ($data != null) {
-            foreach ($data as $item) {
-                if ($item['type'] == 'image') {
-                    $preview = '<span class="preview"><img src="' . Storage::url($item['path']) . '"></span>';
-                } else {
-                    $pictures = FileUtil::getFilePreview($item['type'], $item['path']);
-                    $preview = '<span class="fileicon"><img src="/vendor/dcat-admin-extensions/' . $pictures . '"></span>';
-                }
-                $file = [
-                    'id' => $item['id']
-                    , 'preview' => $preview
-                    , 'title' => $item['title']
-                    , 'size' => FileUtil::getFormatBytes($item['size'])
-                ];
-                $list[] = $file;
-            }
-        }else{
-            $msg = 'No files record!';
-        }
-
-        return $this->jsonResponse($list, $msg);
-    }
-
-    protected function jsonResponse($data, $msg = '')
-    {
-        $code = ($msg != '')?1:0;
-        $result = [
-            'code'  => $code
-            ,'msg'  => $msg
-            ,'data' => $data
-        ];
-        return json_encode($result,JSON_UNESCAPED_UNICODE);
-    }
-*/
 }

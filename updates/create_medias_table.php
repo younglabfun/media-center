@@ -15,7 +15,6 @@ class CreateMediasTable extends Migration
     {
         Schema::create('medias', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('group_id')->nullable()->default('0')->comment('分组id');
             $table->string('title')->nullable()->default('')->comment('文件标题');
             $table->string('file_name')->comment('文件名');
             $table->string('path')->comment('路径');

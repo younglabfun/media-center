@@ -53,19 +53,21 @@
     var dialogId = $('{!! $dialogSelector !!}').attr('id');
 
     (function( $ ){
-        // 当domReady的时候开始初始化
-
         $(function() {
-            var options = {!! $options !!};
-            var inputId = '{{ $name }}';
-            var inputVal = '{!! $value !!}';
-            console.log(inputVal);
-
-            // uploader
-            var opts = $.extend({
-                fieldId: inputId,
-                fieldVal: inputVal,
-
+            var defaults = {!! $options !!};
+            var options = {
+                fieldId: '{{ $name }}',
+                fieldVal: '{!! $value !!}',
+                uploader: {
+                    pick: {
+                        id: '#uploadBtn',
+                        label: '<i class="feather icon-upload"></i>&nbsp;上传',
+                        style: "",
+                    },
+                    formData: {
+                        _token: '{{csrf_token()}}'
+                    },
+                },
                 selector: {
                     dialog: '[data-id="' + dialogId + '"]',
                     dialogId: dialogId,
@@ -74,21 +76,10 @@
                     max: {{ $max }},
                     @endif
                 }
-            }, options);
-            opts.uploader = $.extend({
-                server: '/admin/uploadSerives',
-                pick: {
-                    id: '#uploadBtn',
-                    style: "",
-                },
-                formData: {
-                    _token: '{{csrf_token()}}'
-                },
-            }, opts.uploader);
-
-            var uploader = new Uploader(opts);
-            uploader.build();
-
+            };
+            var setting = $.extend({}, defaults, options);
+            var mc_selector = new MCSelector(setting);
+            mc_selector.build();
         });
     })( jQuery );
 </script>

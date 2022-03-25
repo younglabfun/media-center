@@ -10,6 +10,7 @@ use Dcat\Admin\Traits\HasUploadedFile;
 use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
 use Dcat\Admin\MediaCenter\MediaCenterServiceProvider;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class UploadController
 {
@@ -33,9 +34,6 @@ class UploadController
                 ->success(MediaCenterServiceProvider::trans('media.upload_sucesses'))
                 ->data($uploadData)
                 ->send();
-
-            //: $this->responseUploaded($uploadData['path'], $uploadData['url']);
-
     }
 
     /**
@@ -91,7 +89,7 @@ class UploadController
             {
                 $nameArr = explode('.', $fileName);
                 $fileName = $nameArr[0].'_'.time().'.'.$nameArr[1];
-                dump($fileName);
+                //dump($fileName);
             }
             $path = $file->storeAs($folder, $fileName);
         }else{
@@ -99,11 +97,18 @@ class UploadController
         }
         //Storage::putFileAs($folder, $file, $file->getClientOriginalName());
 
+        //缩略图
+        /*
+        $image = Image::make('public/'.$path)->resize(300,200);
+        dump($image);
+        exit;*/
+        //$this->saveThumb($path);
+
         $dir = $this->defaultDirectory();
         $fileType = FileUtil::getFileType(Storage::disk($dir)->url($path));
 
         $meta = $this->_getMeta($file, $fileType, $typeInfo['suffix']);
-        
+
         $data = [
             'path' => $path
             ,'title' => $fileName
@@ -121,7 +126,7 @@ class UploadController
                 'path' => $path,
                 'name' => $fileName,
                 'fileType' =>  $fileType,
-                'url' => Storage::disk($dir)->url($path),
+                'url' => route('public_images',$path),
             ];
             return $result;
         }

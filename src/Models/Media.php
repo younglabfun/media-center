@@ -4,8 +4,10 @@ namespace Dcat\Admin\MediaCenter\Models;
 
 use Dcat\Admin\Traits\HasDateTimeFormatter;
 use Illuminate\Database\Eloquent\Model;
+use Dcat\Admin\MediaCenter\Models\MediaGroup;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Dcat\Admin\Traits\Resizable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Media extends Model
 {
@@ -14,16 +16,24 @@ class Media extends Model
 		SoftDeletes;
 
 	protected $table = 'medias';
-	
+
 	protected $fillable = [
 		'file_name', 'path', 'title', 'size', 'type', 'meta'
-		,'group_id','updated_at', 'public'
+		,'updated_at', 'public'
 	];
 
-	public function mediaGroup()
-	{
-		return $this->belongsTo(MediaGroup::class,'group_id');
-	}
+    /**
+     * 定义关联模型
+     * belongsToMany
+     */
+    public function mediaGroups(): BelongsToMany
+    {
+        $pivotTable = 'media_group_relation';
+        $relatedModel = MediaGroup::class;
+
+        return $this->belongsToMany($relatedModel, $pivotTable, 'media_id', 'group_id')
+            ->withTimestamps();;
+    }
 
 	public static function getGroupTitle( $group )
 	{
@@ -35,9 +45,3 @@ class Media extends Model
 	}
 
 }
-
-/*
-INSERT INTO `files` (`group_id`, `path`, `type`, `title`, `file_name`, `size`, `meta`, `show`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(0, 'upload_files/823451502e0bf6f2adc6ee828f27e03a.jpg', 'image', 'test file', 'fojing.jpg', 1231231, 'image/jpg', 1, NULL, NULL, NULL);
-
- * */

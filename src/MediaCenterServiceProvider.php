@@ -44,19 +44,16 @@ class MediaCenterServiceProvider extends ServiceProvider
 	{
 		parent::init();
 		Admin::requireAssets('dcat-admin.media-center');
-		Admin::asset()->alias('@mselector', [
-			'js' => [
-				// 支持使用路径别名
-				'@extension/dcat-admin/media-center/js/webuploader.min.js',
-				'@extension/dcat-admin/media-center/js/upload.js',
-				'@extension/dcat-admin/media-center/js/jquery.splitter-0.14.0.js',
-			],
-			'css' => [
-				'@extension/dcat-admin/media-center/css/webuploader.css',
-				'@extension/dcat-admin/media-center/css/jquery.splitter.css',
-				'@extension/dcat-admin/media-center/css/index.css',
-			],
-		]);
+        Admin::asset()->alias('@mselector', [
+            'js' => [
+                // 支持使用路径别名
+                '@extension/dcat-admin/media-center/js/webuploader.min.js',
+                '@extension/dcat-admin/media-center/js/mcselector.js',
+            ],
+            'css' => [
+                '@extension/dcat-admin/media-center/css/webuploader.css',
+            ],
+        ]);
 
 		// 注册文件选择组件
 		Form::extend('mediaSelector', MediaSelector::class);

@@ -34,6 +34,18 @@ class FileUtil
         }
         return $filterOptions;
     }
+
+    public static function getTypes( $typeName )
+    {
+        $filetypes = array_keys(self::$fileTypes);
+        if (in_array( $typeName, $filetypes))
+        {
+            $typestr = self::$fileTypes[$typeName];
+            $types = explode("|", $typestr);
+            return $types;
+        }
+        return "";
+    }
     /**
      * @param $filePath | 文件绝对路径
      * @return bool|int|string
@@ -72,13 +84,6 @@ class FileUtil
         return round($size, 2) . $units[$i];
 
     }
-
-    public static function getFileUrl($disk, $path)
-    {
-        $disk = Storage::disk($disk);
-        return $disk->url($path);
-    }
-
 
     public static function getFilePreview($fileType, $path)
     {
@@ -123,6 +128,5 @@ class FileUtil
 
         return "<i class='fa ".$preview."' style='font-size:24px;'></i>";
     }
-
 
 }

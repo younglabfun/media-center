@@ -27,7 +27,7 @@ class MediaGroupController extends Controller
                     $form = new WidgetForm();
 
                     $form->select('parent_id', trans('admin.parent_id'))->default(0)->options(MediaGroup::getOptions());
-                    $form->text('title', trans('admin.name'));
+                    $form->text('name', trans('admin.name'));
                     $form->number('order', trans('admin.order'));
                     $form->width(9, 2);
 
@@ -49,9 +49,9 @@ class MediaGroupController extends Controller
 
             $tree->branch(function ($branch) {
 
-                $payload = "<strong>{$branch['title']}</strong>";
-                $data = $branch->loadCount('media');
-                $payload.= " (".$data['media_count'].")";
+                $payload = "<strong>{$branch['name']}</strong>";
+                //$data = $branch->loadCount('media');
+                //$payload.= " (".$data['media_count'].")";
                 return $payload;
             });
         });
@@ -66,7 +66,7 @@ class MediaGroupController extends Controller
     {
         return Form::make(new MediaGroup(), function (Form $form) {
             $form->select('parent_id', trans('admin.parent_id'))->options(MediaGroup::getOptions());
-            $form->text('title');
+            $form->text('name');
             $form->number('order');
         });
     }

@@ -17,7 +17,7 @@ class UploadBtn extends AbstractTool
      */
     protected $uploadService;
 
-    protected $view = 'Jyounglabs.MediaCenter::_upload_btn';
+    protected $view = 'Jyounglabs.media0-center::_upload_btn';
 
     protected $limit = 10; // 最多一次10个文件
 

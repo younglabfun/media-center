@@ -44,7 +44,7 @@ class MediaTable extends LazyRenderable
             $grid->quickSearch(['file_name', 'title', 'type']);
 
             $grid->simplePaginate();
-            $grid->view('Jyounglabs.MediaCenter::_page');
+            $grid->view('Jyounglabs.media-center::_page');
             $grid->paginate(25);
         });
     }

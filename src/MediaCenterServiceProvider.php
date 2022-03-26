@@ -46,7 +46,7 @@ class MediaCenterServiceProvider extends ServiceProvider
     public function init()
     {
         parent::init();
-        Admin::requireAssets('Jyounglabs.MediaCenter');
+        Admin::requireAssets('Jyounglabs.media-center');
         Admin::asset()->alias('@mselector', [
             'js' => [
                 // 支持使用路径别名

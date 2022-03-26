@@ -4,6 +4,12 @@ Media center是Dcat Admin的扩展，支持媒体批量上传、分组管理，�
 
 ####	预览
 
+![媒体中心](https://github.com/jyounglabs/media-center/blob/main/screenshot/main.png)
+
+媒体中心-媒体列表
+
+
+
 #### 功能
 
 - 全局文件上传服务接口

@@ -21,6 +21,10 @@
             "Dcat\\Admin\\MediaCenter\\": "src/"
         }
     },
+    "repositories" : {
+        "type": "path",
+        "url": "app/Admin/Extensions/dcat-admin-extensions/jyounglabs/media-center"
+    },
     "extra": {
         "dcat-admin": "Dcat\\Admin\\MediaCenter\\MediaCenterServiceProvider",
         "laravel": {

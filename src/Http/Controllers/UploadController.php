@@ -95,14 +95,6 @@ class UploadController
         }else{
             $path = $file->store($folder, $fileName);
         }
-        //Storage::putFileAs($folder, $file, $file->getClientOriginalName());
-
-        //缩略图
-        /*
-        $image = Image::make('public/'.$path)->resize(300,200);
-        dump($image);
-        exit;*/
-        //$this->saveThumb($path);
 
         $dir = $this->defaultDirectory();
         $fileType = FileUtil::getFileType(Storage::disk($dir)->url($path));

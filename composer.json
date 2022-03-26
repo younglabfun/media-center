@@ -1,5 +1,5 @@
 {
-    "name": "dcat-admin/media-center",
+    "name": "jyounglabs/media-center",
     "alias": "媒体中心",
     "description": "管理网站媒体文件...",
     "type": "library",

@@ -18,7 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Dcat\\Admin\\MediaCenter\\": "src/"
+            "DcatAdmin\\MediaCenter\\": "src/"
         }
     },
     "repositories" : {
@@ -26,10 +26,10 @@
         "url": "app/Admin/Extensions/dcat-admin-extensions/jyounglabs/media-center"
     },
     "extra": {
-        "dcat-admin": "Dcat\\Admin\\MediaCenter\\MediaCenterServiceProvider",
+        "dcat-admin": "DcatAdmin\\MediaCenter\\MediaCenterServiceProvider",
         "laravel": {
             "providers": [
-                "Dcat\\Admin\\MediaCenter\\MediaCenterServiceProvider"
+                "DcatAdmin\\MediaCenter\\MediaCenterServiceProvider"
             ]
         }
     }

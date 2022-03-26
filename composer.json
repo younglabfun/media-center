@@ -22,10 +22,10 @@
         }
     },
     "extra": {
-        "dcat-admin": "jyounglabs\\MediaCenterServiceProvider",
+        "dcat-admin": "Jyounglabs\\MediaCenterServiceProvider",
         "laravel": {
             "providers": [
-                "jyounglabs\\MediaCenterServiceProvider"
+                "Jyounglabs\\MediaCenterServiceProvider"
             ]
         }
     }

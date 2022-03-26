@@ -46,15 +46,15 @@ class MediaCenterServiceProvider extends ServiceProvider
     public function init()
     {
         parent::init();
-        Admin::requireAssets('Jyounglabs.media-center');
+        Admin::requireAssets('jyounglabs.media-center');
         Admin::asset()->alias('@mselector', [
             'js' => [
                 // 支持使用路径别名
-                '@extension/Jyounglabs/MediaCenter/js/webuploader.min.js',
-                '@extension/Jyounglabs/MediaCenter/js/mcselector.js',
+                '@extension/jyounglabs/media-center/js/webuploader.min.js',
+                '@extension/jyounglabs/media-center/js/mcselector.js',
             ],
             'css' => [
-                '@extension/Jyounglabs/MediaCenter/css/webuploader.css',
+                '@extension/jyounglabs/media-center/css/webuploader.css',
             ],
         ]);
 

@@ -18,7 +18,7 @@ class MediaSelector extends Field
      */
     protected $uploadService;
 
-    protected $view = 'Jyounglabs.media-center::_selector';
+    protected $view = 'jyounglabs.media-center::_selector';
 
     protected $selectStyle = 'success';
 

@@ -71,7 +71,6 @@ class UploadBtn extends AbstractTool
             'options'       => JavaScript::format($options)
         ];
         Admin::requireAssets(['@mselector']);
-        //Admin::requireAssets(['@mcupload']);
         return view($this->view, $viewData);
     }
 

@@ -4,12 +4,12 @@
     "description": "管理网站媒体文件...",
     "type": "library",
     "keywords": ["dcat-admin", "extension"],
-    "homepage": "https://github.com/dcat-admin/file-manager",
+    "homepage": "https://github.com/jyounglabs/media-center",
     "license": "MIT",
     "authors": [
         {
-            "name": "J.yang",
-            "email": "55811858@qq.com"
+            "name": "J.young",
+            "email": "pagopagi@gmail.com"
         }
     ],
     "require": {

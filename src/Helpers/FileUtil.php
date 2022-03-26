@@ -1,6 +1,6 @@
 <?php
 
-namespace Dcat\Admin\MediaCenter\Helpers;
+namespace Jyounglabs\Helpers;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;

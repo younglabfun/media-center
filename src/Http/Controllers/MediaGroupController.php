@@ -1,10 +1,10 @@
 <?php
 
-namespace Dcat\Admin\MediaCenter\Http\Controllers;
+namespace Jyounglabs\Http\Controllers;
 
 use Illuminate\Routing\Controller;
-use Dcat\Admin\MediaCenter\Models\MediaGroup;
-use Dcat\Admin\MediaCenter\MediaCenterServiceProvider;
+use Jyounglabs\Models\MediaGroup;
+use Jyounglabs\MediaCenterServiceProvider;
 use Dcat\Admin\Form;
 use Dcat\Admin\Tree;
 use Dcat\Admin\Widgets\Form as WidgetForm;

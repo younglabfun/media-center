@@ -39,6 +39,7 @@ class MCSelector {
 
         this.options = $.extend({}, this.defaults, options);
 
+        //console.log('uploader', this.options.uploader);
         this.options.uploader.server = options.config.uploadService; // 上传服务
         this.options.uploader.pick.style = ''; // 使用自定义按钮样式 注释后使用webupload默认按钮样式
 
@@ -174,11 +175,11 @@ class MCSelector {
 
         // 状态方法
         let uploading = () => {
-            console.log('status: uploading!');
+            //console.log('status: uploading!');
             //Dcat.info( '开始上传...' );
         };
         let finish = () => {
-            console.log('status: finish!');
+            //console.log('status: finish!');
             var stats = uploader.getStats();
             if ( stats.successNum ) {
                 Dcat.success( '完成上传' );

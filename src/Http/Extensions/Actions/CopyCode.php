@@ -1,8 +1,7 @@
 <?php
-namespace Dcat\Admin\MediaCenter\Http\Extensions\Actions;
+namespace Jyounglabs\Http\Extensions\Actions;
 
 use Dcat\Admin\Grid\RowAction;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class CopyCode extends RowAction
@@ -80,9 +79,9 @@ $('.grid-check-row').on('click', function () {
     tmp.val(content).select();
     document.execCommand("copy");
     tmp.remove();
-    
+
     $(this).tooltip('show');
-    //console.log('response', response, target); 
+    //console.log('response', response, target);
 });
 JS;
         $this->response()->success('成功！');

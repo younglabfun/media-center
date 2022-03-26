@@ -1,6 +1,6 @@
 <?php
 
-namespace Dcat\Admin\MediaCenter;
+namespace Jyounglabs;
 
 use Dcat\Admin\Extend\Setting as Form;
 

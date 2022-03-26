@@ -1,13 +1,10 @@
 <?php
 
-namespace Dcat\Admin\MediaCenter\Http\Extensions\Actions;
+namespace Jyounglabs\Http\Extensions\Actions;
 
 use Dcat\Admin\Grid\BatchAction;
-use Dcat\Admin\MediaCenter\Models\MediaGroup;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Dcat\Admin\Widgets\Modal;
-use Dcat\Admin\MediaCenter\Http\Extensions\Form\BatchMoveForm;
+use Jyounglabs\Http\Extensions\Form\BatchMoveForm;
 
 class BatchMove extends BatchAction
 {

@@ -1,12 +1,11 @@
 <?php
 
-namespace Dcat\Admin\MediaCenter\Http\Extensions\Form;
+namespace Jyounglabs\Http\Extensions\Form;
 
-use Dcat\Admin\MediaCenter\Helpers\FileUtil;
+use Jyounglabs\Helpers\FileUtil;
 use Dcat\Admin\Form\Field;
-use Dcat\Admin\MediaCenter\Renderable\MediaGroupTable;
-use Dcat\Admin\MediaCenter\Renderable\MediaTable;
-use Dcat\Admin\MediaCenter\MediaCenterServiceProvider;
+use Jyounglabs\Renderable\MediaTable;
+use Jyounglabs\MediaCenterServiceProvider;
 use Dcat\Admin\Support\JavaScript;
 use Illuminate\Support\Facades\Storage;
 use Dcat\Admin\Widgets\Modal;
@@ -19,7 +18,7 @@ class MediaSelector extends Field
      */
     protected $uploadService;
 
-    protected $view = 'dcat-admin.media-center::_selector';
+    protected $view = 'Jyounglabs.MediaCenter::_selector';
 
     protected $selectStyle = 'success';
 

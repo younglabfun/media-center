@@ -1,10 +1,9 @@
 <?php
 
-namespace Dcat\Admin\MediaCenter\Http\Extensions\Tools;
+namespace Jyounglabs\Http\Extensions\Tools;
 
-use Dcat\Admin\MediaCenter\Helpers\FileUtil;
-use Dcat\Admin\MediaCenter\MediaCenterServiceProvider;
-use Dcat\Admin\Form;
+use Jyounglabs\Helpers\FileUtil;
+use Jyounglabs\MediaCenterServiceProvider;
 use Dcat\Admin\Grid\Tools\AbstractTool;
 use Dcat\Admin\Support\JavaScript;
 use Illuminate\Support\Facades\Storage;
@@ -18,7 +17,7 @@ class UploadBtn extends AbstractTool
      */
     protected $uploadService;
 
-    protected $view = 'dcat-admin.media-center::_upload_btn';
+    protected $view = 'Jyounglabs.MediaCenter::_upload_btn';
 
     protected $limit = 10; // 最多一次10个文件
 

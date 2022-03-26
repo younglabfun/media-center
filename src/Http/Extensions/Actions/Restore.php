@@ -1,5 +1,5 @@
 <?php
-namespace Dcat\Admin\MediaCenter\Http\Extensions\Actions;
+namespace Jyounglabs\Http\Extensions\Actions;
 
 use Dcat\Admin\Grid\RowAction;
 use Illuminate\Http\Request;

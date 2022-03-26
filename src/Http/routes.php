@@ -1,6 +1,6 @@
 <?php
 
-use Dcat\Admin\MediaCenter\Http\Controllers;
+use Jyounglabs\Http\Controllers;
 use Illuminate\Support\Facades\Route;
 
 Route::resource('media-center', Controllers\MediaCenterController::class);

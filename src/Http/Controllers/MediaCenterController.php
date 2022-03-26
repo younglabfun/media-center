@@ -1,19 +1,18 @@
 <?php
 
-namespace Dcat\Admin\MediaCenter\Http\Controllers;
+namespace Jyounglabs\Http\Controllers;
 
-use Dcat\Admin\MediaCenter\MediaCenterServiceProvider;
-use Dcat\Admin\MediaCenter\Http\Extensions\Tools\UploadBtn;
-use Dcat\Admin\MediaCenter\Http\Extensions\Actions\Restore;
-use Dcat\Admin\MediaCenter\Http\Extensions\Actions\BatchRestore;
-use Dcat\Admin\MediaCenter\Http\Extensions\Actions\ForceDelete;
-use Dcat\Admin\MediaCenter\Http\Extensions\Actions\BatchForceDelete;
-use Dcat\Admin\MediaCenter\Http\Extensions\Actions\BatchMove;
-use Dcat\Admin\MediaCenter\Http\Extensions\Actions\CopyCode;
-use Dcat\Admin\MediaCenter\Helpers\FileUtil;
-use Dcat\Admin\MediaCenter\Models\Media;
-use Dcat\Admin\MediaCenter\Models\MediaGroup;
-use Dcat\Admin\MediaCenter\Renderable\MediaTable;
+use Jyounglabs\MediaCenterServiceProvider;
+use Jyounglabs\Http\Extensions\Tools\UploadBtn;
+use Jyounglabs\Http\Extensions\Actions\Restore;
+use Jyounglabs\Http\Extensions\Actions\BatchRestore;
+use Jyounglabs\Http\Extensions\Actions\ForceDelete;
+use Jyounglabs\Http\Extensions\Actions\BatchForceDelete;
+use Jyounglabs\Http\Extensions\Actions\BatchMove;
+use Jyounglabs\Http\Extensions\Actions\CopyCode;
+use Jyounglabs\Helpers\FileUtil;
+use Jyounglabs\Models\Media;
+use Jyounglabs\Models\MediaGroup;
 use Dcat\Admin\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;

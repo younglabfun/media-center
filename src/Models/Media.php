@@ -1,10 +1,9 @@
 <?php
 
-namespace Dcat\Admin\MediaCenter\Models;
+namespace Jyounglabs\Models;
 
 use Dcat\Admin\Traits\HasDateTimeFormatter;
 use Illuminate\Database\Eloquent\Model;
-use Dcat\Admin\MediaCenter\Models\MediaGroup;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Dcat\Admin\Traits\Resizable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;

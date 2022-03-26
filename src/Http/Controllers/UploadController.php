@@ -1,16 +1,15 @@
 <?php
-namespace Dcat\Admin\MediaCenter\Http\Controllers;
+namespace Jyounglabs\Http\Controllers;
 
-use Dcat\Admin\MediaCenter\Models\Media;
-use Dcat\Admin\MediaCenter\Helpers\FileUtil;
+use Jyounglabs\Models\Media;
+use Jyounglabs\Helpers\FileUtil;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Dcat\Admin\Http\JsonResponse;
 use Dcat\Admin\Traits\HasUploadedFile;
 use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
-use Dcat\Admin\MediaCenter\MediaCenterServiceProvider;
-use Intervention\Image\ImageManagerStatic as Image;
+use Jyounglabs\MediaCenterServiceProvider;
 
 class UploadController
 {

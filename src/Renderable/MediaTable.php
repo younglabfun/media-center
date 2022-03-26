@@ -1,12 +1,11 @@
 <?php
 
-namespace Dcat\Admin\MediaCenter\Renderable;
+namespace Jyounglabs\Renderable;
 
 use Dcat\Admin\Grid;
 use Dcat\Admin\Grid\LazyRenderable;
-use Dcat\Admin\MediaCenter\Models\Media;
-use Dcat\Admin\MediaCenter\Helpers\FileUtil;
-use Dcat\Admin\MediaCenter\Http\Extensions\Actions\CopyCode;
+use Jyounglabs\Models\Media;
+use Jyounglabs\Helpers\FileUtil;
 
 class MediaTable extends LazyRenderable
 {
@@ -45,7 +44,7 @@ class MediaTable extends LazyRenderable
             $grid->quickSearch(['file_name', 'title', 'type']);
 
             $grid->simplePaginate();
-            $grid->view('dcat-admin.media-center::_page');
+            $grid->view('Jyounglabs.MediaCenter::_page');
             $grid->paginate(25);
         });
     }

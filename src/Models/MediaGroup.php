@@ -1,6 +1,6 @@
 <?php
 
-namespace Dcat\Admin\MediaCenter\Models;
+namespace Jyounglabs\Models;
 
 use Dcat\Admin\Traits\HasDateTimeFormatter;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;

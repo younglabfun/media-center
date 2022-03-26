@@ -34,7 +34,7 @@
             <div class="input-group-append">
                 <div class="btn btn-info" id="uploadBtn">
                     <i class="feather icon-upload"></i> &nbsp;
-                    {{Dcat\Admin\MediaCenter\MediaCenterServiceProvider::trans('media.upload')}}</div>
+                    {{Jyounglabs\MediaCenterServiceProvider::trans('media.upload')}}</div>
             </div>
             <div class="input-group-append" style="margin-left:5px;" {!! $attributes !!}>
             </div>

@@ -1,9 +1,9 @@
 <?php
 
-namespace Dcat\Admin\MediaCenter\Http\Extensions\Form;
+namespace Jyounglabs\Http\Extensions\Form;
 
-use Dcat\Admin\MediaCenter\Models\MediaGroup;
-use Dcat\Admin\MediaCenter\Models\Media;
+use Jyounglabs\Models\MediaGroup;
+use Jyounglabs\Models\Media;
 use Dcat\Admin\Widgets\Form;
 use Dcat\Admin\Traits\LazyWidget;
 use Dcat\Admin\Contracts\LazyRenderable;

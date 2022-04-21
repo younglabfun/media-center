@@ -117,7 +117,7 @@ class UploadController
                 'path' => $path,
                 'name' => $fileName,
                 'fileType' =>  $fileType,
-                'url' => route('public_images',$path),
+                'url' => route('pubimg',$path),
             ];
             return $result;
         }

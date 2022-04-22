@@ -85,7 +85,8 @@ class MediaSelector extends Field
             ->title("选择媒体")
             ->body(MediaTable::make())
             ->footer($this->renderFooter())
-            ->button($this->renderButton());
+            ->button($this->renderButton())
+            ->success('Dcat.reload()');
 
         // 向视图添加变量
         $this->addVariables([

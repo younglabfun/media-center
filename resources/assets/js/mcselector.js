@@ -183,11 +183,12 @@ class MCSelector {
             var stats = uploader.getStats();
             if ( stats.successNum ) {
                 Dcat.success( '完成上传' );
+                /*
                 if (mode !== 'full') {
                     setTimeout(function(){
                         location.reload();
                     },3000);
-                }
+                }*/
             } else {
                 // 没有成功的图片，重设
                 state = 'done';

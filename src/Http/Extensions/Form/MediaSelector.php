@@ -81,7 +81,7 @@ class MediaSelector extends Field
         $this->style = $this->selectStyle;
 
         $dialog = Modal::make()
-            ->lg()
+            ->xl()
             ->title("选择媒体")
             ->body(MediaTable::make())
             ->footer($this->renderFooter())
@@ -95,6 +95,18 @@ class MediaSelector extends Field
             'dialog'         => $dialog,
             'dialogSelector' => $dialog->getElementSelector(),
         ]);
+
+        // 格式化数据，显示图片缩略图
+        $values = $this->value();
+        if($values!=null){
+            $jsons = json_decode($values, true);
+            foreach ($jsons as &$json)
+            {
+                if (!isset($json['fileType']) || $json['fileType']!='image')continue;
+                $json['thumbnail'] = FileUtil::getFilePreview($json['fileType'], $json['path']);
+            }
+            $this->value(json_encode($jsons));
+        }
 
         return parent::render();
     }

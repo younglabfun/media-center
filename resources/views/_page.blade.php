@@ -1,29 +1,22 @@
 <style>
     .file{
         border: 1px solid #eeeeee;
-        margin: 7px;
+        margin: 3px;
         text-align: center;
-        padding: 1rem !important;
+        padding: 5px !important;
         cursor: pointer;
+        max-width: 150px;
     }
     .file-view img{
-        width: 100px;
-        margin: 5px;
+        width: 100%;
     }
-    .file-view i{
-        font-size: 100px !important;
-        margin: 5px 12px;
+    .file-info{
+        padding: 5px;
     }
-    .file-title div{
-        padding: 0;
-        margin:0;
-    }
-    .file-title span{
-        width: 80px;
+    .file-info div{
+        padding: 5px 0;
         overflow: hidden;
-        display: block;
-        word-break: break-all;
-
+        white-space: nowrap;
     }
     /* custom */
     .btn-mini{
@@ -40,11 +33,8 @@
         border: 0px;
     }
 </style>
-<div class="dcat-box">
-
-    <div class="d-block pb-0">
-        @include('admin::grid.table-toolbar')
-    </div>
+<div class="dcat-box custom-data-table dt-bootstrap4">
+    @include('admin::grid.table-toolbar')
     {!! $grid->renderFilter() !!}
 
     {!! $grid->renderHeader() !!}
@@ -54,12 +44,11 @@
             @foreach($grid->rows() as $row)
                 <label class="file" id="file_{!! $row->column('id') !!}">
                     <div class="file-view">{!! $row->column('view_path') !!}</div>
-                    <div class="file-title row">
-                        <div class="col-2">
+                    <div class="file-info">
+                        <div class="item">{!! $row->column('title') !!}</div>
+                        <div class="d-flex justify-content-between">
                             <input id="{!! $row->column('id') !!}" data-id="{!! $row->column('id') !!}" data-name="{!! $row->column('file_name') !!}" data-path="{!! $row->column('path') !!}" data-type="{!! $row->column('type') !!}" type="checkbox">
-                        </div>
-                        <div class="col-10">
-                            <span>{!! $row->column('title') !!}</span>
+                            <span>{!! $row->column('id') !!} / {!! $row->column('size') !!}</span>
                         </div>
                     </div>
                 </label>

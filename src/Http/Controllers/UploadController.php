@@ -22,17 +22,15 @@ class UploadController
         if ($files == null) {
             return $this->responseErrorMessage(MediaCenterServiceProvider::trans('media.upload_error_none'));
         }
-        foreach ($files as $file)
-        {
+        foreach ($files as $file) {
             $uploadData = $this->upload($file);
         }
-
         return !$uploadData
             ? $this->responseErrorMessage('文件上传失败')
             : JsonResponse::make()
                 ->success(MediaCenterServiceProvider::trans('media.upload_sucesses'))
                 ->data($uploadData)
-                ->send();
+                ->refresh();
     }
 
     /**
@@ -101,23 +99,24 @@ class UploadController
         $meta = $this->_getMeta($file, $fileType, $typeInfo['suffix']);
 
         $data = [
-            'path' => $path
-            ,'title' => $fileName
-            ,'file_name' => $fileName
+            'path'          => $path
+            ,'title'        => $fileName
+            ,'file_name'    => $fileName
             ,'size'         => $file->getSize()
-            ,'meta'         =>  json_encode($meta)
-            ,'type'         =>  $fileType
-            ,'created_at'         =>  date("Y-m-d H:i:s")
+            ,'meta'         => json_encode($meta)
+            ,'type'         => $fileType
+            ,'created_at'   => date("Y-m-d H:i:s")
         ];
 
         $insertId = Media::query()->insertGetId($data);
         if ($insertId) {
             $result = [
-                'id' => $insertId,
-                'path' => $path,
-                'name' => $fileName,
-                'fileType' =>  $fileType,
-                'url' => route('pubimg',$path),
+                'id'        => $insertId,
+                'path'      => $path,
+                'name'      => $fileName,
+                'fileType'  => $fileType,
+                'url'       => public_path('uploads').'/'.$path,
+                'thumbnail' => FileUtil::getFilePreview($fileType, $path)
             ];
             return $result;
         }

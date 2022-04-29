@@ -1,2 +1,6 @@
 .DS_Store
+resources/.DS_Store
+resources/lang/.DS_Store
+resources/assets/.DS_Store
+src/Http/.DS_Store
 .idea/

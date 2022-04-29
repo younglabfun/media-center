@@ -18,9 +18,53 @@
     box-shadow: 0 0px 0px 0px rgba(0,0,0,.1),0 0px 0px 0 rgba(0,0,0,.1),0 0px 0px 0px rgba(0,0,0,.1) !important;
     color: #9e9e9e !important;
 }
+.mc-ul li{
+    position: relative;
+}
+.mc-ul li:hover .remove_media_display{
+    display: block;
+}
+.mc-ul li:hover .tools{
+    display: flex!important;
+}
+.remove_media_display{
+    position: absolute;
+    display: none;
+    cursor: pointer;
+    opacity: 0.9;
+    border-radius: 0 0 0 5px;
+    top: 0;
+    z-index: 999;
+    right: 0;
+    background: red;
+    color: #fff !important;
+    padding: 2px 6px;
+}
+.tools{
+    position: absolute;
+    display: none !important;
+    bottom: 0;
+    width: 100%;
+    height: 25px;
+    z-index: 999;
+}
+.tools a{
+    opacity: 0.7;
+    background: #FFFFFF;
+    cursor: pointer;
+    display: block;
+    width: 50%;
+    line-height: 1.5;
+    text-align: center;
+}
+.tools a:hover{
+    opacity: 0.9;
+    color: #606060 !important;
+}
+/*
 .select2-container {
     display: flex;
-}
+}*/
 </style>
 
 <div class="{{$viewClass['form-group']}} {{ $class }}">
@@ -44,7 +88,7 @@
         </div>
         <input type="hidden" class="form-control" name="{{ $name }}" value="{{$value}}" id="field_{{ $name }}">
         @include('admin::form.help-block')
-        <ul class="d-flex flex-wrap list-inline help-block field_{{$name}}_display">
+        <ul class="d-flex flex-wrap list-inline help-block field_{{$name}}_display mc-ul">
         </ul>
     </div>
 </div>

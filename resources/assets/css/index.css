@@ -2,3 +2,44 @@
     font-size: 1.3rem;
     cursor: pointer;
 }
+.mailbox-attachment-icon {
+    max-height: none;
+}
+.mailbox-attachment-info {
+    background: #fff;
+}
+.mailbox-attachments .img-thumbnail {
+    border: 1px solid #fff;
+    border-radius: 0;
+    background-color: #fff;
+}
+.mailbox-attachment-icon.has-img>img {
+    max-width: 100%!important;
+    /*height: 180px!important;*/
+}
+.mailbox-attachment-info .item {
+    margin-bottom: 6px;
+}
+.mailbox-attachments li {
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.08);
+    border: 0;
+    background: #fff;
+}
+
+body.dark-mode .table {
+    background-color: #2c2c43;
+}
+body.dark-mode .mailbox-attachments .img-thumbnail {
+    border-color: #223;
+    background-color: #223;
+}
+body.dark-mode .mailbox-attachment-info {
+    background: #223;
+}
+body.dark-mode .mailbox-attachments li {
+    border-color: #223;
+    background-color: #223;
+}
+body.dark-mode .mailbox-attachment-name {
+    color: #a8a9bb
+}

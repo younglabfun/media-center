@@ -52,6 +52,7 @@ class MediaCenterServiceProvider extends ServiceProvider
                 // 支持使用路径别名
                 '@extension/jyounglabs/media-center/js/webuploader.min.js',
                 '@extension/jyounglabs/media-center/js/mcselector.js',
+                '@extension/jyounglabs/media-center/js/spotlight.bundle.js',
             ],
             'css' => [
                 '@extension/jyounglabs/media-center/css/webuploader.css',

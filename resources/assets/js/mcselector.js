@@ -80,6 +80,7 @@ class MCSelector {
         let uploader = this.uploader,
             // 实际field input显示数据内容
             uploadedFiles = [],
+            fileIds = [],
             mode = this.options.mode,
             lang = this.options.lang,
             state = 'pedding';  // 可能有pedding, ready, uploading, confirm, done.
@@ -214,11 +215,12 @@ class MCSelector {
 
             if (mode == 'full') {
                 // 上传成功，保存新文件名和路径到file对象
-                obj.file.id = result.data.id;
-                obj.file.name = result.data.name;
-                obj.file.path = result.data.path;
-                obj.file.fileType = result.data.fileType;
-                obj.file.url = result.data.url || null;
+                obj.file.id         = result.data.id;
+                obj.file.name       = result.data.name;
+                obj.file.path       = result.data.path;
+                obj.file.fileType   = result.data.fileType;
+                obj.file.url        = result.data.url || null;
+                obj.file.thumbnail  = result.data.thumbnail || null;
 
                 setFieldVal(obj.file);
                 addUploadedFile(obj.file);
@@ -233,29 +235,47 @@ class MCSelector {
                     id: fileObj.id,
                     name: fileObj.name,
                     path: fileObj.path,
-                    fileType: fileObj.fileType
+                    fileType: fileObj.fileType,
+                    thumbnail: fileObj.thumbnail
                 }
                 uploadedFiles.push(file);
+                fileIds.push(fileObj.id);
                 this.fieldVals.push(fileObj.path);
-            }else{
+            } else {
                 var len = uploadedFiles.length;
-                for (var i=0; i<len; i++){
-                    if (uploadedFiles[i].id == fileObj.id){
-                        uploadedFiles.splice(i,1);
-                        this.fieldVals.splice(i,1);
+                for (var i = 0; i < len; i++) {
+                    if (uploadedFiles[i].id == fileObj.id) {
+                        uploadedFiles.splice(i, 1);
+                        fileIds.splice(i, 1);
+                        this.fieldVals.splice(i, 1);
                         break;
                     }
                 }
                 var flen = files.length;
-                for (var j=0; j<flen; j++){
-                    if (files[j].id == fileObj.id){
-                        uploader.removeFile( files[j], true );
+                for (var j = 0; j < flen; j++) {
+                    if (files[j].id == fileObj.id) {
+                        uploader.removeFile(files[j], true);
                         break;
                     }
                 }
             }
+            setField();
+        };
+
+        let setField = () => {
             if (uploadedFiles.length != 0) {
-                $('#field_' + this.options.fieldId).val(JSON.stringify(uploadedFiles));
+                console.log('ids: '+ fileIds);
+                // 赋值之前去掉thumbnail
+                var fieldVal = [];
+                uploadedFiles.forEach(function(item){
+                    fieldVal.push({
+                        id: item.id,
+                        name: item.name,
+                        path: item.path,
+                        fileType: item.fileType,
+                    });
+                });
+                $('#field_' + this.options.fieldId).val(JSON.stringify(fieldVal));
                 $('#' + this.options.fieldId).val(this.fieldVals.join(','));
             }else{
                 $('#field_' + this.options.fieldId).val('');
@@ -266,10 +286,9 @@ class MCSelector {
         // 显示上传文件
         let addUploadedFile = ( file ) => {
             console.log('add uploaded file!')
-            var html = '<li class="list-inline-item">' +
-                    '<a href="JavaScript:;" title="预览" data-path="' + file.path + '" data-id="' + file.id + '">';
+            var html = '<li class="list-inline-item" data-id="' + file.id + '">';
             if (file.fileType == 'image'){
-                html+='<img data-action="preview-img" src="' + file.url + '" class="img img-thumbnail">';
+                html+='<img data-src="' + file.url + '" src="'+file.thumbnail+'" class="img img-thumbnail spotlight">';
             }else if(file.fileType == 'audio'){
                 html+='<div class="img-thumbnail"><i class="fa fa-file-audio-o file-icon"></i></div>';
             }else if(file.fileType == 'video'){
@@ -291,22 +310,65 @@ class MCSelector {
             }else{
                 html+='<div class="img-thumbnail"><i class="fa fa-file-o file-icon"></i></div>';
             }
-            html += '</a>';
-            html += '<button type="button" class="btn btn-block btn-danger btn-sm remove_media_display">';
-            html += '<i class="fa fa-trash"></i> 删除';
-            html += '</button>';
-            html += '</li>';
+            html += '<a class="remove_media_display" alt=" 删除 "><i class="fa fa-trash"></i></a>';
+            html += '<div class="d-flex justify-content-between item tools">';
+            html += '<a class="faicon fa fa-angle-left"></a><a class="faicon fa fa-angle-right"></a>';
+            html += '</div></li>';
 
             $('.field_' + this.options.fieldId + '_display').append(html);
 
             // 删除
-            $('.remove_media_display').on('click', function () {
-                var id = $(this).parent().find('a').attr('data-id');
+            $('.remove_media_display').off('click').on('click', function () {
+                var id = $(this).parent().attr('data-id');
+                //console.log('ddd'+id);
                 var delFile = {id:id};
                 setFieldVal(delFile, false);
                 $(this).hide().parent().remove();
                 return false;
             });
+            // 前移
+            $('.fa-angle-left').off('click').on('click', function () {
+                //console.log('prev');
+                var parentLi = $(this).parent().parent();
+                var prev = parentLi.prev();
+                if (prev.html()!=undefined)
+                {
+                    prev.before(parentLi);
+                    moveIndex(parentLi.attr('data-id'), 0);
+                }
+                return false;
+            });
+            // 后移
+            $('.fa-angle-right').off('click').on('click', function () {
+                //console.log('next');
+                var parentLi = $(this).parent().parent();
+                var next = parentLi.next();
+                if(next.html()!=undefined)
+                {
+                    next.after(parentLi);
+                    moveIndex(parentLi.attr('data-id'), 1);
+                }else{
+                    return false;
+                }
+            });
+        }
+        let moveIndex = (id,left) => {
+            var index = fileIds.indexOf(parseInt(id));
+            var index2 = (left == 1) ? index+1 : index-1;
+            //console.log('ids: '+ fileIds + 'index: '+index + 'index2: '+index2);
+            swap(fileIds, index, index2);
+            swap(uploadedFiles, index, index2);
+            swap(this.fieldVals, index, index2);
+            //console.log('ids---- '+ fileIds);
+            setField();
+        }
+        // 调整元素顺序
+        let swap = (arr, index1, index2)  => {
+
+            arr[index1] = arr.splice(index2, 1, arr[index1])[0];
+
+            return arr;
+
         }
 
         //  初始化
@@ -323,7 +385,7 @@ class MCSelector {
                 var file = fieldVals[i];
                 setFieldVal(file);
                 file.url = this.options.config.pathUrl + file.path;
-                addUploadedFile(file);
+                addUploadedFile(file, i);
             }
         };
 
@@ -337,6 +399,7 @@ class MCSelector {
 
                 var file = uploadedFiles[i];
                 file.url = this.options.config.pathUrl + file.path;
+
                 addUploadedFile(file);
             }
         };
@@ -371,6 +434,8 @@ class MCSelector {
                     name = $this.data('file_name'),
                     path = $this.data('path'),
                     type = $this.data('type');
+                var imgDiv = $this.parent().parent().prev();
+                var thumbnail = imgDiv.children('.spotlight').attr('src');
 
                 if (this.checked) {
 
@@ -378,7 +443,7 @@ class MCSelector {
                         $this.prop('checked', false);
                         return Dcat.warning(lang.exceed_max_item);
                     }
-                    setFieldVal({id: id, name: name, path: path, fileType: type});
+                    setFieldVal({id: id, name: name, path: path, fileType: type, thumbnail: thumbnail});
                     setChecked(id);
                 } else {
 

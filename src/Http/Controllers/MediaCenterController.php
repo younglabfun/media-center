@@ -4,6 +4,7 @@ namespace Jyounglabs\Http\Controllers;
 
 use Jyounglabs\MediaCenterServiceProvider;
 use Jyounglabs\Http\Extensions\Tools\UploadBtn;
+use Jyounglabs\Http\Extensions\Tools\WitchGridView;
 use Jyounglabs\Http\Extensions\Actions\Restore;
 use Jyounglabs\Http\Extensions\Actions\BatchRestore;
 use Jyounglabs\Http\Extensions\Actions\ForceDelete;
@@ -19,6 +20,7 @@ use Illuminate\Routing\Controller;
 use Dcat\Admin\Layout\Content;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Form;
+use Dcat\Admin\Admin;
 
 class MediaCenterController extends Controller
 {
@@ -33,20 +35,25 @@ class MediaCenterController extends Controller
     public function grid()
     {
         return Grid::make(new Media(), function (Grid $grid) {
-            $grid->model()->orderBy('id', 'desc');
+            if (request()->get('_view_') !== 'list') {
+                $grid->view('jyounglabs.media-center::grid');
+                $grid->setActionClass(Grid\Displayers\Actions::class);
+            }
+            Admin::css('@extension/jyounglabs/media-center/css/index.css');
+            Admin::js('@extension/jyounglabs/media-center/js/spotlight.bundle.js');
 
-            $grid->showBatchActions();
+            $grid->model()->orderBy('id', 'desc');
+            $grid->tools(new WitchGridView());
             $grid->tools(new UploadBtn());
+            $grid->showBatchActions();
             if (request('_scope_') == 'trashed') {
                 $grid->disableDeleteButton();
                 $grid->disableBatchDelete();
             }
-            $grid->showColumnSelector();
             $grid->showCreateButton(false);
             $grid->disableEditButton();
             $grid->disableViewButton();
-            $grid->disableQuickEditButton(false);
-            $grid->setDialogFormDimensions('500px', '350px');
+            $grid->disableQuickEditButton();
 
             $grid->quickSearch(['id', 'title']);
             $grid->filter(function ($filter) {
@@ -59,27 +66,20 @@ class MediaCenterController extends Controller
             $grid->column('path', "文件")
                 ->display(function() {
                     $preview = FileUtil::getFilePreview($this->type, $this->path);
+                    //dump($preview)
                     if (substr($preview, 0, 1) == "<") {
                         return $preview;
                     } else {
-                        $img = '<img data-action="preview-img" src="' . $preview . '"';
-                        $img .= ' style="max-width:48px;max-height:48px;cursor:pointer" class="img img-thumbnail">';
+                        $img = '<img src="' . $preview . '" data-src="'.url('uploads').'/'.$this->path.'" class="spotlight">';
                         return $img;
                     }
-                })
-                ->width('50px');
+                });
 
             $grid->column('title','名称')->editable();
             $grid->mediaGroups('分组')->pluck('name')->label()->filter();
-            $grid->column('type','类型')
-                ->width("100px")->label('#222')
-                ->filter(
-                    Grid\Column\Filter\In::make(FileUtil::getFileTypes())
-                );
-                //->filterByValue();
             $grid->column('size','大小')->display(function(){
                 return FileUtil::getFormatBytes($this->size);
-            })->width("80px");
+            })->width("100px");
             $grid->column('created_at','添加时间');
 
             $grid->actions(function (Grid\Displayers\Actions $actions) {
@@ -102,7 +102,6 @@ class MediaCenterController extends Controller
             });
         });
     }
-
     /**
      * Create interface.
      *

@@ -19,14 +19,16 @@ class MediaTable extends LazyRenderable
             $grid->disableRefreshButton();
             $grid->disableCreateButton();
 
+            $grid->column('size','大小')->display(function() {
+                return FileUtil::getFormatBytes($this->size);
+            });
             $grid->column('view_path', "文件")
                 ->display(function() {
                     $preview = FileUtil::getFilePreview($this->type, $this->path);
                     if (substr($preview, 0, 1) == "<") {
                         return $preview;
                     } else {
-                        $img = '<img data-action="preview-img" src="' . $preview . '"';
-                        $img .= ' style="cursor:pointer" class="img img-thumbnail">';
+                        $img = '<img src="' . $preview . '" data-src="'.url('uploads').'/'.$this->path.'" class="spotlight">';
                         return $img;
                     }
                 });

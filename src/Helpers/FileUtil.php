@@ -4,6 +4,7 @@ namespace Jyounglabs\Helpers;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class FileUtil
 {
@@ -19,6 +20,9 @@ class FileUtil
         'ppt'   => 'ppt|pot|pps|ppa|pptx|potx|ppsx|ppam|pptm|potm|ppsm',
         'pdf'   => 'pdf',
     ];
+
+    public static $thumbnailPath = 'thumbnails';
+    public static $thumbnailSize = '180';
 
     public static function getTypesData()
     {
@@ -82,15 +86,36 @@ class FileUtil
             $size /= 1024;
         }
         return round($size, 2) . $units[$i];
+    }
 
+    public static function getThumbnailName($filePath, $size)
+    {
+        $fileName = File::basename($filePath);
+        $arr = explode('.', $fileName);
+        $thumbnail = $arr[0].'_s'.$size.'.'.$arr[1];
+        return $thumbnail;
     }
 
     public static function getFilePreview($fileType, $path)
     {
         switch ($fileType) {
             case 'image':
-                if (Storage::exists($path)){
-                    return Storage::url($path);
+                $sourcePath = public_path('uploads') .'/'. $path;
+                if (file_exists($sourcePath)){
+                    // 缩略图
+                    $thumbnailFile = self::$thumbnailPath.'/'.self::getThumbnailName($path, self::$thumbnailSize);
+                    $thumbnailPath = public_path('uploads').'/'.$thumbnailFile;
+                    if (!file_exists($thumbnailPath))
+                    {
+                        $thumbnailDir = public_path('uploads').'/'.self::$thumbnailPath;
+                        if(!is_readable($thumbnailDir))
+                            mkdir($thumbnailDir,0700);
+
+                        $img = Image::make($sourcePath);
+                        $img->fit(self::$thumbnailSize);
+                        $img->save($thumbnailPath);
+                    }
+                    return Storage::url($thumbnailFile);
                 }
                 $preview = 'fa-file-image-o';
                 break;
